@@ -1,29 +1,29 @@
 package com.jeronimo.webfluxdemo.controller;
 
 import com.jeronimo.webfluxdemo.dto.Response;
-import com.jeronimo.webfluxdemo.service.MathService;
+import com.jeronimo.webfluxdemo.service.ReactiveMathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("math")
-public class MatchController {
+@RequestMapping("reactive-math")
+public class ReactiveMathController {
 
     @Autowired
-    private MathService mathService;
+    private ReactiveMathService mathService;
 
     @GetMapping("square/{input}")
-    public Response findSquare(@PathVariable int input){
+    public Mono<Response> findSquare(@PathVariable int input){
         return this.mathService.findSquare(input);
     }
 
     @GetMapping("table/{input}")
-    public List<Response> multiplicaTable(@PathVariable int input){
+    public Flux<Response> multiplicaTable(@PathVariable int input){
         return this.mathService.multiplicationTable(input);
     }
 }
