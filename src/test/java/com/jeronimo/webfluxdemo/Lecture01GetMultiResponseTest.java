@@ -4,6 +4,7 @@ import com.jeronimo.webfluxdemo.dto.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -13,28 +14,17 @@ public class Lecture01GetMultiResponseTest extends BaseTest{
     private WebClient webClient;
 
     @Test
-    public void blockTest(){
-        Response response = this.webClient
+    public void fluxTest(){
+        Flux<Response> responseFlux = this.webClient
                 .get()
-                .uri("reactive-math/square/{number}", 5)
+                .uri("reactive-math/table/{number}", 5)
                 .retrieve()
-                .bodyToMono(Response.class) //Mono<Response>
-                .block();
+                .bodyToFlux(Response.class)
+                .doOnNext(System.out::println); //Mono<Response>;
 
-        System.out.println(response);
-
-    }
-
-    @Test
-    public void stepVerifierTest(){
-        Mono<Response> responseMono = this.webClient
-                .get()
-                .uri("reactive-math/square/{number}", 5)
-                .retrieve()
-                .bodyToMono(Response.class); //Mono<Response>;
-
-        StepVerifier.create(responseMono)
-                .expectNextMatches(r -> r.getOutput() == 25)
+        StepVerifier.create(responseFlux)
+                .expectNextCount(10)
                 .verifyComplete();
+
     }
 }
