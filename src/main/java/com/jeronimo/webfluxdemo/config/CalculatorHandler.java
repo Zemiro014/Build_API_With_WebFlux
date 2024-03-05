@@ -14,21 +14,21 @@ public class CalculatorHandler {
 
     // calculator/{a}/{b}
     public Mono<ServerResponse> additionalHandler(ServerRequest serverRequest){
-        return process(serverRequest, (a, b) -> ServerResponse.ok().bodyValue(a+" + "+b+" = "+(a+b)));
+        return process(serverRequest, (a, b) -> ServerResponse.ok().bodyValue(a+b));
     }
 
     public Mono<ServerResponse> subtractionHandler(ServerRequest serverRequest){
-        return process(serverRequest, (a, b) -> ServerResponse.ok().bodyValue(a+" - "+b+" = "+(a-b)));
+        return process(serverRequest, (a, b) -> ServerResponse.ok().bodyValue(a-b));
     }
 
     public Mono<ServerResponse> multiplicationHandler(ServerRequest serverRequest){
-        return process(serverRequest, (a, b) ->  b != 0 ? ServerResponse.ok().bodyValue(a+" * "+b+" = "+(a*b))
+        return process(serverRequest, (a, b) ->  b != 0 ? ServerResponse.ok().bodyValue(a*b)
                 :
                 ServerResponse.badRequest().bodyValue("b can not be 0"));
     }
 
     public Mono<ServerResponse> divisionHandler(ServerRequest serverRequest){
-        return process(serverRequest, (a, b) -> ServerResponse.ok().bodyValue(a+" / "+b+" = "+(a/b)));
+        return process(serverRequest, (a, b) -> ServerResponse.ok().bodyValue(a/b));
     }
 
     private Mono<ServerResponse> process(ServerRequest request, BiFunction<Integer, Integer, Mono<ServerResponse>> opLogic){
