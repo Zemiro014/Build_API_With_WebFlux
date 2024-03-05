@@ -4,6 +4,8 @@ import com.jeronimo.webfluxdemo.dto.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 public class Lecture01GetSingleResponseTest extends BaseTest{
 
@@ -21,5 +23,18 @@ public class Lecture01GetSingleResponseTest extends BaseTest{
 
         System.out.println(response);
 
+    }
+
+    @Test
+    public void stepVerifierTest(){
+        Mono<Response> responseMono = this.webClient
+                .get()
+                .uri("reactive-math/square/{number}", 5)
+                .retrieve()
+                .bodyToMono(Response.class); //Mono<Response>;
+
+        StepVerifier.create(responseMono)
+                .expectNextMatches(r -> r.getOutput() == 25)
+                .verifyComplete();
     }
 }
