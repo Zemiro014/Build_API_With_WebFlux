@@ -8,11 +8,10 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
-@SpringBootTest
+@SpringBootTest // This guy scan the all project and creates the Beans before starting the tests
 @AutoConfigureWebTestClient
 public class Lecture01SimpleWebTestClientTest {
 
