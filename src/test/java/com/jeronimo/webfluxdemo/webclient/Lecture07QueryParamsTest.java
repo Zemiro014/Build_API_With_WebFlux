@@ -1,17 +1,10 @@
-package com.jeronimo.webfluxdemo;
+package com.jeronimo.webfluxdemo.webclient;
 
-import com.jeronimo.webfluxdemo.dto.InputFailedValidationResponse;
-import com.jeronimo.webfluxdemo.dto.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
-import java.net.URI;
 
 public class Lecture07QueryParamsTest extends BaseTest {
 

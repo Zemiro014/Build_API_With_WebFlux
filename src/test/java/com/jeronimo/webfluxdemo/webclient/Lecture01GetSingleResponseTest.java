@@ -1,4 +1,4 @@
-package com.jeronimo.webfluxdemo;
+package com.jeronimo.webfluxdemo.webclient;
 
 import com.jeronimo.webfluxdemo.dto.Response;
 import org.junit.jupiter.api.Test;
