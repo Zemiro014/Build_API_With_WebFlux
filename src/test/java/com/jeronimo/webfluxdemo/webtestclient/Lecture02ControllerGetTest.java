@@ -43,4 +43,20 @@ public class Lecture02ControllerGetTest {
                 .value( response -> Assertions.assertThat(response.getOutput()).isEqualTo(25));
 
     }
+
+    @Test
+    public void fluentAssertionTest_MockReturnEmptyMono(){
+
+        Mockito.when(reactiveMathService.findSquare(Mockito.anyInt())).thenReturn(Mono.empty());
+
+        this.client
+                .get()
+                .uri("/reactive-math/square/{number}", 5)
+                .exchange()
+                .expectStatus().is2xxSuccessful()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(Response.class)
+                .value( response -> Assertions.assertThat(response.getOutput()).isEqualTo(-1));
+
+    }
 }

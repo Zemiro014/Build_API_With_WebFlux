@@ -20,12 +20,14 @@ public class ReactiveMathController {
 
     @GetMapping("square/{input}")
     public Mono<Response> findSquare(@PathVariable int input){
-        return this.mathService.findSquare(input);
+        return this.mathService.findSquare(input)
+                .defaultIfEmpty(new Response(-1));
     }
 
     @GetMapping("table/{input}")
     public Flux<Response> multiplicaTable(@PathVariable int input){
-        return this.mathService.multiplicationTable(input);
+        return this.mathService.multiplicationTable(input)
+                .defaultIfEmpty(new Response(-1));
     }
 
     @GetMapping(value = "table/{input}/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
