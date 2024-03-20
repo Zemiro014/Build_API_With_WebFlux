@@ -1,5 +1,6 @@
 package com.jeronimo.webfluxdemo.webtestclient;
 
+import com.jeronimo.webfluxdemo.controller.ParamsController;
 import com.jeronimo.webfluxdemo.controller.ReactiveMathController;
 import com.jeronimo.webfluxdemo.dto.Response;
 import com.jeronimo.webfluxdemo.service.ReactiveMathService;
@@ -15,6 +16,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
+import java.util.Map;
 
 /*
 * The "WebFluxTest" makes the Autoconfiguration but not scan the all project and doesn't create any Beans.
@@ -22,7 +24,7 @@ import java.time.Duration;
 *
 * The "WebFluxTest" allows you creating beans by demand
 * */
-@WebFluxTest(ReactiveMathController.class) // It was specified a bean of ReactiveMathController
+@WebFluxTest(controllers = {ReactiveMathController.class, ParamsController.class}) // It was specified a bean of ReactiveMathController
 public class Lecture02ControllerGetTest {
 
     @Autowired
@@ -100,5 +102,21 @@ public class Lecture02ControllerGetTest {
                 .expectBodyList(Response.class)
                 .hasSize(3);
 
+    }
+
+    @Test
+    public void paramsTest(){
+        Map<String, Integer> map = Map.of(
+                "count", 10,
+                "page", 20
+        );
+
+        this.client
+                .get()
+                .uri(b -> b.path("/jobs/search").query("count={count}&page={page}").build(map))
+                .exchange()
+                .expectStatus().is2xxSuccessful()
+                .expectBodyList(Integer.class)
+                .hasSize(2).contains(10, 20);
     }
 }
