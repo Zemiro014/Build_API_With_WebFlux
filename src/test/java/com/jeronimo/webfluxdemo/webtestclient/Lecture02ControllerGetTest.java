@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /*
@@ -57,6 +58,25 @@ public class Lecture02ControllerGetTest {
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody(Response.class)
                 .value( response -> Assertions.assertThat(response.getOutput()).isEqualTo(-1));
+
+    }
+
+    @Test
+    public void listResponseTest(){
+
+        Flux<Response> responseFlux = Flux.range(1, 3)
+                .map(Response::new);
+
+        Mockito.when(reactiveMathService.multiplicationTable(Mockito.anyInt())).thenReturn(responseFlux);
+
+        this.client
+                .get()
+                .uri("/reactive-math/table/{number}", 5)
+                .exchange()
+                .expectStatus().is2xxSuccessful()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBodyList(Response.class)
+                .hasSize(3);
 
     }
 }
