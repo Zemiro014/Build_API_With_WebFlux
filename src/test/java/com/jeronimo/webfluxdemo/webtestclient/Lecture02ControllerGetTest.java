@@ -14,6 +14,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+
 /*
 * The "WebFluxTest" makes the Autoconfiguration but not scan the all project and doesn't create any Beans.
 * If you need some beans it's necessary to specify which beans you need before starting the tests
@@ -75,6 +77,26 @@ public class Lecture02ControllerGetTest {
                 .exchange()
                 .expectStatus().is2xxSuccessful()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBodyList(Response.class)
+                .hasSize(3);
+
+    }
+
+    @Test
+    public void streamingResponseTest(){
+
+        Flux<Response> responseFlux = Flux.range(1, 3)
+                .map(Response::new)
+                .delayElements(Duration.ofMillis(100));
+
+        Mockito.when(reactiveMathService.multiplicationTable(Mockito.anyInt())).thenReturn(responseFlux);
+
+        this.client
+                .get()
+                .uri("/reactive-math/table/{number}/stream", 5)
+                .exchange()
+                .expectStatus().is2xxSuccessful()
+                .expectHeader().contentTypeCompatibleWith(MediaType.TEXT_EVENT_STREAM)
                 .expectBodyList(Response.class)
                 .hasSize(3);
 
